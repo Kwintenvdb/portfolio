@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Rebuilding my portfolio with Metalsmith</title>
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="/css/purified.css" />
+		<link href="https://fonts.googleapis.com/css?family=Roboto:300,400|Roboto+Slab:300,400,700" rel="stylesheet" />
+		
+		<script src="/bundle.js" type="text/javascript"></script>
+	
+		<!-- Global Site Tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-107225758-1"></script>
+	</head>	
+	<body>
+		<div class="hero-fill"></div>
+		<div>
+			<div class="section-hero">
+				<div class="grid-lg container">
+					<header class="navbar">
+						<section class="navbar-section">
+							<a href="/"><h4 class="serif">Kwinten <span class="light">vdb</span></h4></a>
+						</section>
+						<section class="navbar-section">
+							<a href="/" class="btn btn-link  ">Portfolio</a>
+							<a href="/about" class="btn btn-link ">About</a>
+							<a href="/contact" class="btn btn-link ">Contact</a>
+							<a href="/blog" class="btn btn-link active">Blog</a>
+						</section>
+					</header>
+				</div>
+			</div><div class="page-intro text-center">
+	<h1 class="m-0">Rebuilding my portfolio with Metalsmith</h1>
+	<h4 class="mb-0"><small>September 14th, 2017</small></h4>
+</div>
+
+<div class="section-page">
+	<div class="grid-sm container">
+		<p>Welcome to the first blog entry on my new portfolio website!
+I recently decided to rebuild my personal portfolio as a static website. My previous portfolio was built as a React single page application, which, to be fair, wasn&apos;t the ideal format for a simple portfolio website.</p>
+<p>I actually loved using React, but I completely used it for the wrong purpose when building the site. While it was a great learning experience, there is no reason why my portfolio couldn&apos;t be a simple, static website.</p>
+<p>I decided to see what&apos;s out there concerning static site generators these days. There is a plethora of options to choose from, but I decided on using Metalsmith, for a number of reasons.</p>
+<p>First of all, Metalsmith&apos;s barebones-ness was probably the most attractive thing to me. There is no magic to Metalsmith. It reads files, runs them through a series of plugins, and finally outputs the results and writes them back to your filesystem. It&apos;s extremely simple, but also extremely powerful. There is no magic at work here - and it is a joy to work with.</p>
+<h3 id="putting-it-all-together">Putting it all together</h3>
+<p>For my build process, I use a rather large amount of plugins. Without necessarily diving into the code, I think discussing each plugin, and the order they are used in, gives a great overview of how this site is generated.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">Metalsmith</span><span class="token punctuation">(</span>__dirname<span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">watch</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token comment" spellcheck="true">/* ... */</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">readMore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">markdown</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token comment" spellcheck="true">/* ... */</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">prism</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">collections</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token comment" spellcheck="true">/* ... */</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">permalinks</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token comment" spellcheck="true">/* ... */</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">layouts</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token comment" spellcheck="true">/* ... */</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">assets</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token comment" spellcheck="true">/* ... */</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">purifyCSS</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token comment" spellcheck="true">/* ... */</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">uglify</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token comment" spellcheck="true">/* ... */</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">serve</span><span class="token punctuation">(</span><span class="token punctuation">{</span>  <span class="token comment" spellcheck="true">/* ... */</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span>err <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token keyword">throw</span> err<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>The <code>watch</code> and <code>serve</code> plugins take care of rebuilding files when any changes occur in the source directory, and serving them over a local HTTP server so I can view my website in any browser.</p>
+<p><code>readMore</code> is a custom plugin which splits up my blog posts written in Markdown to cut off text written after &quot;READMORE&quot; for the preview.</p>
+<p><code>markdown</code> converts Markdown and front matter into usable Javascript objects and HTML.</p>
+<p><code>prism</code> takes care of code syntax highlighting, using <a href="http://prismjs.com/">Prism</a>.</p>
+<p><code>collections</code> bundles files with a special tags into iterable collections (like blog posts).</p>
+<p><code>permalinks</code> takes care of making links prettier.</p>
+<p><code>layouts</code> takes care of merging the HTML generated from Markdown with custom templates. I use <a href="http://handlebarsjs.com/">Handlebars</a> as a templating language.</p>
+<p><code>assets</code> simply copies my static assets (CSS files, images, Javascript files) over to the build directory.</p>
+<p><code>purifyCSS</code> removes unused styles from my CSS files, and merges them into one big stylesheet, using <a href="https://github.com/purifycss/purifycss">PurifyCSS</a>.</p>
+<p><code>uglify</code> uses <a href="https://github.com/mishoo/UglifyJS2">UglifyJS</a> to minify my Javascript files.</p>
+<h3 id="design">Design</h3>
+<p>I made use of <a href="https://picturepan2.github.io/spectre/index.html">Spectre.css</a> as a lightweight base CSS framework. I built my own styles on top of this framework, and heavily customized this base. I chose Spectre for its incredibly clean base styles, responsiveness out of the box, and lightweightness. Modifying the styles with SASS was a breeze. I have absolutely no complaints about Spectre, it was great for what I needed it for.</p>
+<h3 id="hosting">Hosting</h3>
+<p>After the build has been generated by Metalsmith, I need some place to host the files. I chose to use <a href="https://pages.github.com/">GitHub Pages</a> for this purpose. GitHub Pages acts as a webhost for static websites that are hosted in a public GitHub repository. All you need to do is commit the built files to a GitHub repository, mark the repository as a GitHub Pages site, and you are pretty much done! It&apos;s incredibly simple, and best of all, it&apos;s completely free. This setup perfectly suited my needs, and it meant that my only cost was buying my own custom domain.</p>
+
+	</div>
+</div>
+		</div>
+	</body>
+</html>
